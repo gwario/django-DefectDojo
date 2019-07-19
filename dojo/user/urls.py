@@ -1,9 +1,11 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib.auth.views import login
 
 from dojo.user import views
 
 urlpatterns = [
+    # social-auth-django required url package
+    url('', include('social_django.urls', namespace='social')),
     #  user specific
     url(r'^login$', login,
         {'template_name': 'dojo/login.html'}, name='login'),
@@ -21,5 +23,5 @@ urlpatterns = [
     url(r'^user/(?P<uid>\d+)/delete', views.delete_user,
         name='delete_user'),
     url(r'^api/key$', views.api_key, name='api_key'),
-    url(r'^api/v2/key$', views.api_v2_key, name='api_v2_key'),
+    url(r'^api/key-v2$', views.api_v2_key, name='api_v2_key'),
 ]

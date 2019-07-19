@@ -5,6 +5,7 @@ from dojo.tools.nexpose.parser import NexposeFullXmlParser
 from dojo.tools.veracode.parser import VeracodeXMLParser
 from dojo.tools.zap.parser import ZapXmlParser
 from dojo.tools.checkmarx.parser import CheckmarxXMLParser
+from dojo.tools.crashtest_security.parser import CrashtestSecurityXmlParser
 from dojo.tools.contrast.parser import ContrastCSVParser
 from dojo.tools.bandit.parser import BanditParser
 from dojo.tools.appspider.parser import AppSpiderXMLParser
@@ -13,6 +14,8 @@ from dojo.tools.vcg.parser import VCGParser
 from dojo.tools.dependencycheck.parser import DependencyCheckParser
 from dojo.tools.retirejs.parser import RetireJsParser
 from dojo.tools.nsp.parser import NspParser
+from dojo.tools.npmaudit.parser import NpmAuditParser
+from dojo.tools.phpsymfonysecuritycheck.parser import PhpSymfonySecurityCheckParser
 from dojo.tools.generic.parser import GenericFindingUploadCsvParser
 from dojo.tools.qualys.parser import QualysParser
 from dojo.tools.qualyswebapp.parser import QualysWebAppParser
@@ -24,15 +27,37 @@ from dojo.tools.skf.parser import SKFCsvParser
 from dojo.tools.ssllabs.parser import SSLlabsParser
 from dojo.tools.nikto.parser import NiktoXMLParser
 from dojo.tools.trufflehog.parser import TruffleHogJSONParser
+from dojo.tools.netsparker.parser import NetsparkerParser
+from dojo.tools.php_security_audit_v2.parser import PhpSecurityAuditV2
+from dojo.tools.acunetix.parser import AcunetixScannerParser
+from dojo.tools.fortify.parser import FortifyXMLParser
+from dojo.tools.sonarqube.parser import SonarQubeHtmlParser
+from dojo.tools.clair.parser import ClairParser
+from dojo.tools.mobsf.parser import MobSFParser
+from dojo.tools.awsscout2.parser import AWSScout2Parser
+from dojo.tools.awsprowler.parser import AWSProwlerParser
+from dojo.tools.brakeman.parser import BrakemanScanParser
+from dojo.tools.spotbugs.parser import SpotbugsXMLParser
+from dojo.tools.safety.parser import SafetyParser
+from dojo.tools.clair_klar.parser import ClairKlarParser
+from dojo.tools.dawnscanner.parser import DawnScannerParser
+from dojo.tools.anchore_engine.parser import AnchoreEngineScanParser
+from dojo.tools.bundler_audit.parser import BundlerAuditParser
+from dojo.tools.twistlock.parser import TwistlockParser
+from dojo.tools.kiuwan.parser import KiuwanCSVParser
+from dojo.tools.blackduck.parser import BlackduckHubCSVParser
+from dojo.tools.sonatype.parser import SonatypeJSONParser
+from dojo.tools.openscap.parser import OpenscapXMLParser
+from dojo.tools.immuniweb.parser import ImmuniwebXMLParser
+from dojo.tools.wapiti.parser import WapitiXMLParser
+from dojo.tools.cobalt.parser import CobaltCSVParser
 
 __author__ = 'Jay Paz'
 
-# Modified by dkade to use OpenVASUploadCsvParser
-# Modified by martin.marsicano added SKFCsvParser
 
-
-def import_parser_factory(file, test, scan_type=None):
-    scan_type = test.test_type.name
+def import_parser_factory(file, test, active, verified, scan_type=None):
+    if scan_type is None:
+        scan_type = test.test_type.name
     if scan_type == "Burp Scan":
         parser = BurpXmlParser(file, test)
     elif scan_type == "Nessus Scan":
@@ -41,6 +66,8 @@ def import_parser_factory(file, test, scan_type=None):
             parser = NessusCSVParser(file, test)
         elif filename.endswith("xml") or filename.endswith("nessus"):
             parser = NessusXMLParser(file, test)
+    elif scan_type == "Clair Scan":
+        parser = ClairParser(file, test)
     elif scan_type == "Nmap Scan":
         parser = NmapXMLParser(file, test)
     elif scan_type == "Nikto Scan":
@@ -53,6 +80,8 @@ def import_parser_factory(file, test, scan_type=None):
         parser = CheckmarxXMLParser(file, test)
     elif scan_type == "Contrast Scan":
         parser = ContrastCSVParser(file, test)
+    elif scan_type == "Crashtest Security Scan":
+        parser = CrashtestSecurityXmlParser(file, test)
     elif scan_type == "Bandit Scan":
         parser = BanditParser(file, test)
     elif scan_type == "ZAP Scan":
@@ -69,8 +98,12 @@ def import_parser_factory(file, test, scan_type=None):
         parser = RetireJsParser(file, test)
     elif scan_type == 'Node Security Platform Scan':
         parser = NspParser(file, test)
+    elif scan_type == 'NPM Audit Scan':
+        parser = NpmAuditParser(file, test)
+    elif scan_type == 'Symfony Security Check':
+        parser = PhpSymfonySecurityCheckParser(file, test)
     elif scan_type == 'Generic Findings Import':
-        parser = GenericFindingUploadCsvParser(file, test)
+        parser = GenericFindingUploadCsvParser(file, test, active, verified)
     elif scan_type == 'Qualys Scan':
         parser = QualysParser(file, test)
     elif scan_type == 'Qualys Webapp Scan':
@@ -85,10 +118,56 @@ def import_parser_factory(file, test, scan_type=None):
         parser = SSLlabsParser(file, test)
     elif scan_type == 'Trufflehog Scan':
         parser = TruffleHogJSONParser(file, test)
+    elif scan_type == 'Clair Klar Scan':
+        parser = ClairKlarParser(file, test)
     elif scan_type == 'Gosec Scanner':
         parser = GosecScannerParser(file, test)
     elif scan_type == 'Trustwave Scan (CSV)':
         parser = TrustwaveUploadCsvParser(file, test)
+    elif scan_type == 'Netsparker Scan':
+        parser = NetsparkerParser(file, test)
+    elif scan_type == 'PHP Security Audit v2':
+        parser = PhpSecurityAuditV2(file, test)
+    elif scan_type == 'Acunetix Scan':
+        parser = AcunetixScannerParser(file, test)
+    elif scan_type == 'Fortify Scan':
+        parser = FortifyXMLParser(file, test)
+    elif scan_type == 'SonarQube Scan':
+        parser = SonarQubeHtmlParser(file, test)
+    elif scan_type == 'MobSF Scan':
+        parser = MobSFParser(file, test)
+    elif scan_type == 'AWS Scout2 Scan':
+        parser = AWSScout2Parser(file, test)
+    elif scan_type == 'AWS Prowler Scan':
+        parser = AWSProwlerParser(file, test)
+    elif scan_type == 'Brakeman Scan':
+        parser = BrakemanScanParser(file, test)
+    elif scan_type == 'SpotBugs Scan':
+        parser = SpotbugsXMLParser(file, test)
+    elif scan_type == 'Safety Scan':
+        parser = SafetyParser(file, test)
+    elif scan_type == 'DawnScanner Scan':
+        parser = DawnScannerParser(file, test)
+    elif scan_type == 'Anchore Engine Scan':
+        parser = AnchoreEngineScanParser(file, test)
+    elif scan_type == 'Bundler-Audit Scan':
+        parser = BundlerAuditParser(file, test)
+    elif scan_type == 'Twistlock Image Scan':
+        parser = TwistlockParser(file, test)
+    elif scan_type == 'Kiuwan Scan':
+        parser = KiuwanCSVParser(file, test)
+    elif scan_type == 'Blackduck Hub Scan':
+        parser = BlackduckHubCSVParser(file, test)
+    elif scan_type == 'Sonatype Application Scan':
+        parser = SonatypeJSONParser(file, test)
+    elif scan_type == 'Openscap Vulnerability Scan':
+        parser = OpenscapXMLParser(file, test)
+    elif scan_type == 'Immuniweb Scan':
+        parser = ImmuniwebXMLParser(file, test)
+    elif scan_type == 'Wapiti Scan':
+        parser = WapitiXMLParser(file, test)
+    elif scan_type == 'Cobalt.io Scan':
+        parser = CobaltCSVParser(file, test)
     else:
         raise ValueError('Unknown Test Type')
 

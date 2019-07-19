@@ -15,12 +15,12 @@
     <title>
         {% if request.session.dojo_breadcrumbs and not product_tab.tab %}
             {% with request.session.dojo_breadcrumbs|last as last %}
-                {{ last.title }}
+                {{ last.title }} |
             {% endwith %}
         {% elif product_tab.title %}
-          {{ product_tab.title }}
+          {{ product_tab.title }} |
         {% endif %}
-        | DefectDojo
+        DefectDojo
     </title>
     {% block add_css_before %}
     {% endblock %}
@@ -40,8 +40,11 @@
     {% endblock %}
     <link rel="stylesheet" href="{% static "jquery-ui/themes/flick/jquery-ui.min.css" %}">
     <link rel="shortcut icon" href="{% static "dojo/img/favicon.ico" %}"/>
+    <link rel="stylesheet" href="{% static "chosen-bootstrap/chosen.bootstrap.min.css" %}">
     <link rel="stylesheet" href="{% static "fullcalendar/dist/fullcalendar.min.css" %}">
     <link rel="stylesheet" href="{% static "dojo/css/dojo.css" %}">
+
+
     <style>
         {% block add_styles %}
         {% endblock %}
@@ -68,36 +71,36 @@
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
+              {% if request.user.is_authenticated %}
                 <li>
                     <div class="custom-search-form">
                         <form role="search" method="get" action="{% url 'simple_search' %}">
                             <div class="input-group">
                                 <input id="simple_search" type="text" name="query" class="form-control"
                                        placeholder="Search...">
-	                                    <span class="input-group-btn">
-	                                        <button class="btn btn-primary" type="submit">
-                                                <i class="fa fa-search"></i>
-                                            </button>
-	                                    </span>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="submit" aria-label="Search">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
                             </div>
                         </form>
                     </div>
                     <!-- /input-group -->
                 </li>
-                {% if request.user.is_authenticated %}
-                    <li class="dropdown">
-                        <a class="dropdown-toggle dropdown-toggle-h{% alert_count %}" data-toggle="dropdown" href="#">
-                            <i class="fa fa-bell fa-fw"></i><span
-                            id="alert_count" class="badge badge-count badge-count{% alert_count %}">{% alert_count %}</span>
-                            <i class="fa fa-caret-down"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-alerts">
-                        </ul>
-                        <!-- /.dropdown-alerts -->
-                    </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle dropdown-toggle-h{% alert_count %}" data-toggle="dropdown" href="#" aria-expanded="false" aria-label="{% alert_count %} Alerts">
+                        <i class="fa fa-bell fa-fw"></i>
+                        <span id="alert_count" class="badge badge-count badge-count{% alert_count %}">{% alert_count %}</span>
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                    </ul>
+                    <!-- /.dropdown-alerts -->
+                </li>
                 {% endif %}
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false" aria-label="User Menu">
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
@@ -131,15 +134,21 @@
 
                             {% if request.user.is_staff %}
                                 <li>
-                                    <a href="{% url 'dashboard' %}"><i class="fa fa-dashboard fa-fw"></i> <span>Dashboard</span></a>
+                                    <a href="{% url 'dashboard' %}" aria-disabled="true" aria-expanded="false" aria-label="Dashboard">
+                                        <i class="fa fa-dashboard fa-fw"></i>
+                                        <span>Dashboard</span>
+                                    </a>
                                 </li>
                             {% endif %}
                             <li>
                                 {% if request.user.is_staff %}
-                                    <a href="#"><i class="fa fa-list fa-fw"></i> <span>Products</span>
-                                        <span class="glyphicon arrow"></span></a>
-                                {% else %}
-                                    <a href="{% url 'product' %}" title="Product Listing"><i class="fa fa-list fa-fw"></i> <span>Products</span></a>
+                                    <a href="#" aria-expanded="false" aria-label="Products">
+                                        <i class="fa fa-list fa-fw"></i>
+                                        <span>Products</span>
+                                        <span class="glyphicon arrow"></span>
+                                    </a>
+                                {% elif request.user.is_authenticated %}
+                                <a href="{% url 'product' %}" title="Products" aria-label="Products"><i class="fa fa-list fa-fw"></i><span>Products</span></a>
                                 {% endif %}
                                 {% if request.user.is_staff %}
                                     <ul class="nav nav-second-level">
@@ -161,8 +170,11 @@
                             </li>
                             {% if request.user.is_staff %}
                                 <li>
-                                    <a href="#"><i class="fa fa-inbox fa-fw"></i> <span>Engagements</span><span
-                                            class="glyphicon arrow"></span></a>
+                                    <a href="#" aria-expanded="false" aria-label="Engagements">
+                                        <i class="fa fa-inbox fa-fw"></i>
+                                        <span>Engagements</span>
+                                        <span class="glyphicon arrow"></span>
+                                    </a>
                                     <ul class="nav nav-second-level">
                                         <li>
                                             <a href="{% url 'engagement' %}">All Engagements</a>
@@ -177,8 +189,11 @@
                                     <!-- /.nav-second-level -->
                                 </li>
                                 <li>
-                                    <a href="#"><i class="fa fa-bug fa-fw"></i> <span>Findings</span><span
-                                            class="glyphicon arrow"></span></a>
+                                    <a href="#" aria-expanded="false" aria-label="Findings">
+                                        <i class="fa fa-bug fa-fw"></i>
+                                        <span>Findings</span>
+                                        <span class="glyphicon arrow"></span>
+				    </a>
                                     <ul class="nav nav-second-level">
                                         <li>
                                             <a href="{% url 'open_findings' %}">Open Findings</a>
@@ -199,8 +214,11 @@
                                     <!-- /.nav-second-level -->
                                 </li>
                                 <li>
-                                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> <span>Endpoints</span><span
-                                            class="glyphicon arrow"></span></a>
+                                    <a href="#" aria-expanded="false" aria-label="Endpoints">
+					                    <i class="fa fa-sitemap fa-fw"></i>
+                                        <span>Endpoints</span>
+                                        <span class="glyphicon arrow"></span>
+                                    </a>
                                     <ul class="nav nav-second-level">
                                         <li>
                                             <a href="{% url 'endpoints' %}">All Endpoints</a>
@@ -213,9 +231,13 @@
                                     </ul>
                                 </li>
                             {% endif %}
+                            {% if request.user.is_authenticated %}
                             <li>
-                                <a href="{% url 'reports' %}"><i class="fa fa-file-text-o fa-fw"></i> <span>Reports</span><span
-                                        class="glyphicon arrow"></span></a>
+                                <a href="#" aria-expanded="false" aria-label="Reports">
+				                    <i class="fa fa-file-text-o fa-fw"></i>
+                                    <span>Reports</span>
+                                    <span class="glyphicon arrow"></span>
+                                </a>
                                 <ul class="nav nav-second-level">
                                     <li><a href="{% url 'reports' %}"> All Reports </a></li>
                                     <li><a href="{% url 'report_builder' %}"> Report Builder </a></li>
@@ -223,8 +245,11 @@
                                 <!-- /.nav-second-level -->
                             </li>
                             <li>
-                                <a href="/metrics"><i class="fa fa-bar-chart fa-fw"></i> <span>Metrics</span><span
-                                        class="glyphicon arrow"></span></a>
+                                <a href="#" aria-expanded="false" aria-label="Metrics">
+				                    <i class="fa fa-bar-chart fa-fw"></i>
+                                    <span>Metrics</span>
+                                    <span class="glyphicon arrow"></span>
+                                </a>
                                 <ul class="nav nav-second-level">
                                     <li><a href="{% url 'critical_product_metrics' %}"> Critical Product Metrics </a></li>
                                     <li><a href="{% url 'metrics_product_type' %}"> Product Type Metrics </a></li>
@@ -238,20 +263,27 @@
                                 </ul>
                                 <!-- /.nav-second-level -->
                             </li>
+                            {% endif %}
                             {% if request.user.is_staff %}
                                 <li>
-                                    <a href="{% url 'users' %}"><i class="fa fa-user fa-fw"></i> <span>Users</span></a>
+                                    <a href="{% url 'users' %}" aria-disabled="true" aria-expanded="false" aria-label="Users">
+                                        <i class="fa fa-user fa-fw"></i>
+                                        <span>Users</span>
+                                    </a>
                                 </li>
                             {% endif %}
                             {% if request.user.is_staff %}
                                 <li>
-                                    <a href="{% url 'engagement_calendar' %}"><i class="fa fa-calendar fa-fw"></i>
-                                        <span>Calendar</span></a>
+				                    <a href="{% url 'engagement_calendar' %}" aria-disabled="true" aria-expanded="false" aria-label="Calendar">
+                                        <i class="fa fa-calendar fa-fw"></i>
+                                        <span>Calendar</span>
+                                    </a>
                                 </li>
-                            {% endif %}
                                 <li>
-                                    <a href="{% url 'jira' %}"><i class="fa fa-cog fa-fw"></i>
-                                        <span>Configuration</span></a>
+				                    <a href="#" aria-expanded="false" aria-label="Configuration">
+                                        <i class="fa fa-cog fa-fw"></i>
+                                        <span>Configuration</span>
+                                    </a>
                                     <ul class="nav nav-second-level">
                                         <li><a href="{% url 'cred' %}">Credential Manager </a></li>
                                         {% if "enable_jira"|get_system_setting %}
@@ -266,11 +298,12 @@
                                         {% endif %}
                                     </ul>
                                 </li>
+                            {% endif %}
 
                         {% endblock %}
 
                         <li id="min-menu">
-                            <a href="#" id="minimize-menu">
+                            <a href="#" id="minimize-menu" title="Expand/Collapse Menu" aria-label="Expand/Collapse Menu">
                                 <i id="nav-minimize-menu-li" class="fa fa-arrow-circle-right fa-fw"></i>
                                 <span>Collapse Menu</span>
                             </a>
@@ -320,10 +353,14 @@
                     <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                       <li><a href="{% url 'view_engagements' product_tab.product.id %}"><i class="fa fa-calendar"></i> View Engagements</a></li>
+                      {% if user.is_staff %}
                       <li><a href="{% url 'new_eng_for_prod' product_tab.product.id %}"><i class="fa fa-plus"></i> Add New Engagement</a></li>
+                      {% endif %}
                       <li role="separator" class="divider"></li>
                       <li><a href="{% url 'view_engagements_cicd' product_tab.product.id %}"><i class="fa fa-calendar"></i> View CI/CD Engagements</a></li>
+                      {% if user.is_staff %}
                       <li><a href="{% url 'new_eng_for_prod_cicd' product_tab.product.id %}"><i class="fa fa-plus"></i> Add New CI/CD Engagement</a></li>
+                      {% endif %}
                     </ul>
                   </li>
                   <!-- Findings Tab -->
@@ -339,9 +376,11 @@
                       <li><a href="{% url 'product_accepted_findings' product_tab.product.id %}?test__engagement__product={{ product_tab.product.id }}"><i class="fa fa-check"></i> View Accepted Findings</a></li>
                       <li><a href="{% url 'product_all_findings' product_tab.product.id %}?test__engagement__product={{ product_tab.product.id }}"><i class="fa fa-search"></i> View All Findings</a></li>
                       <li><a href="{% url 'product_closed_findings' product_tab.product.id %}?test__engagement__product={{ product_tab.product.id }}"><i class="fa fa-fire-extinguisher"></i>&nbsp;&nbsp;View Closed Findings </a></li>
+                      {% if user.is_staff %}
                       <li role="separator" class="divider"></li>
                       <li><a href="{% url 'ad_hoc_finding' product_tab.product.id %}"><i class="fa fa-plus"></i> Add New Finding</a></li>
                       <li><a href="{% url 'import_scan_results_prod' product_tab.product.id %}"><i class="fa fa-upload"></i> Import Scan Results</a></li>
+                      {% endif %}
                     </ul>
                   </li>
                   <!-- Endpoints Tab -->
@@ -354,8 +393,10 @@
                       <li><a href="{% url 'vulnerable_endpoints' %}?product={{ product_tab.product.id }}"><i class="fa fa-sitemap"></i> View Vulnerable Endpoints</a></li>
                       <li role="separator" class="divider"></li>
                       <li><a href="{% url 'product_endpoint_report' product_tab.product.id %}"><i class="fa fa-file-text-o"></i> Endpoint Report</a></li>
+                      {% if user.is_staff %}
                       <li role="separator" class="divider"></li>
                       <li><a href="{% url 'add_endpoint' product_tab.product.id %}"><i class="fa fa-plus"></i> Add New Endpoint</a></li>
+                      {% endif %}
                     </ul>
                   </li>
                   <!-- Benchmarks Tab -->
@@ -372,12 +413,12 @@
                     </ul>
                   </li>
                   {% endif %}
+                  {% if user.is_staff %}
                   <li role="presentation" class="dropdown{% if product_tab.tab == 'settings' %} active{% endif %}">
                     <a class="dropdown-toggle" data-toggle="dropdown" href=""><span class="fa fa-cogs" aria-hidden="true"></span>
                       <span class="hidden-xs"> Settings</span>
                     <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                      {% if user.is_staff %}
                         <li role="presentation">
                             <a class="" href="{% url 'edit_product' product_tab.product.id %}">
                                 <i class="fa fa-pencil-square-o"></i> Edit
@@ -438,10 +479,9 @@
                                     <i class="fa fa-trash"></i> Delete
                                 </a>
                             </li>
-                        {% endif %}
-                    </ul>
+                       </ul>
                   </li>
-
+                  {% endif %}
                 </ul>
               </div>
             </div>
@@ -508,7 +548,7 @@
                     </p>
                     <p>
                         DefectDojo is licensed under the <a
-                            href="https://github.com/rackerlabs/django-DefectDojo/blob/master/LICENSE.md">Simplified BSD
+                            href="https://github.com/DefectDojo/django-DefectDojo/blob/master/LICENSE.md">Simplified BSD
                         license</a>.
                     </p>
                     <p>
@@ -544,12 +584,12 @@
 <script type="application/javascript">
     $(document).ready(function() {
         $('.has-popover').popover({'trigger':'hover'});
+        {% if request.user.is_authenticated %}
         $('.dropdown-toggle').click(function() { get_alerts(); });
-
         setInterval(function() {
             update_alertcount();
         }, 10000);
-
+        {% endif %}
         function update_alertcount() {
             $.get("{% url 'alertcount' %}", function (data) {
                 if (data.count != $('#alert_count').text()) {
@@ -559,16 +599,27 @@
             });
         }
 
+        function htmlEscape(str) {
+          return str
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+        }
+
         function get_alerts() {
             $('.dropdown-alerts').html('<div class="text-center"><i class="fa fa-spin fa-spinner"></i></div>');
             $.get("{% url 'alerts_json' %}?limit=12", function (data) {
                 $('.dropdown-alerts').empty();
                 $.each(data, function(i, elem) {
-                    var titleField = elem.fields.title ? elem.fields.title : elem.fields.description;
-                    var desc = titleField.length < 50 ? titleField : jQuery.trim(titleField).substring(0,50).trim(this) + '...';
-                    $('.dropdown-alerts').append('<li><a href="' + elem.fields.url + '"><div><i class="fa fa-' + elem.fields.icon + ' fa-fw"></i> ' +
-                                                  desc + '<span class="pull-right text-muted small">' +
-                                                 elem.fields.source + '</span></div></a></li><li class="divider"></li>');
+                  var titleField = elem.fields.title ? elem.fields.title : elem.fields.description;
+                  var desc = titleField.length < 50 ? titleField : jQuery.trim(titleField).substring(0,50).trim(this) + '...';
+                  var dropdown_alert = "alert-list" + i;
+                  $('.dropdown-alerts').append('<li><div style="padding: 3px 20px;"><i class="fa fa-' + htmlEscape(elem.fields.icon) +
+                                                ' fa-fw"></i><a href="' + htmlEscape(elem.fields.url) + '" id=' + dropdown_alert + '></a><span class="pull-right text-muted small">' +
+                                               htmlEscape(elem.fields.source) + '</span></div></li><li class="divider"></li>');
+                  $("#" + dropdown_alert).text(desc);
                 });
                 $('.dropdown-alerts').append('<li><a class="text-center" href="{% url "alerts" %}"><strong>See All Alerts </strong>' +
                                              '<i class="fa fa-angle-right"></i></a></li>');

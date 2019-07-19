@@ -59,7 +59,7 @@ class CheckmarxXMLParser(object):
                 deeplink = "[{}]({})".format(result.get('DeepLink'), result.get('DeepLink'))
                 findingdetail = "{}**Finding Link:** {}\n\n".format(findingdetail, deeplink)
 
-                dupe_key = "{}{}{}{}".format(categories, cwe, name, result.get('FileName'))
+                dupe_key = "{}{}{}{}".format(categories, cwe, name, result.get('FileName').encode('utf-8'))
 
                 if dupe_key in dupes:
                     find = dupes[dupe_key]
@@ -84,7 +84,7 @@ class CheckmarxXMLParser(object):
                                    mitigation=mitigation,
                                    impact=impact,
                                    references=references,
-                                   file_path=pathnode.find('FileName').text,
+                                   file_path=pathnode.find('FileName').text.encode('utf-8'),
                                    line=pathnode.find('Line').text,
                                    url='N/A',
                                    date=find_date,
@@ -111,13 +111,13 @@ class CheckmarxXMLParser(object):
                     findingdetail = "{}**Source Object:** {}\n".format(findingdetail, pathnode.find('Name').text)
 
                     for codefragment in pathnode.findall('Snippet/Line'):
-                        findingdetail = "{}**Number:** {}\n**Code:** {}\n".format(findingdetail, codefragment.find('Number').text, codefragment.find('Code').text.strip())
+                        findingdetail = "{}**Number:** {}\n**Code:** {}\n".format(findingdetail, codefragment.find('Number').text, codefragment.find('Code').text.encode('utf-8').strip())
 
                     findingdetail = '{}-----\n'.format(findingdetail)
 
                 self.result_dupes[result_dupes_key] = True
 
-        if title and pathnode.find('FileName').text:
-            title = "{} ({})".format(title, ntpath.basename(pathnode.find('FileName').text))
+        if title and pathnode.find('FileName').text.encode('utf-8'):
+            title = "{} ({})".format(title, ntpath.basename(pathnode.find('FileName').text.encode('utf-8')))
 
         return title, findingdetail, pathnode

@@ -3,7 +3,7 @@ import os
 import re
 import time
 import unittest
-
+import sys
 import requests
 from selenium import webdriver
 from selenium.common.exceptions import NoAlertPresentException
@@ -23,10 +23,10 @@ class Login(unittest.TestCase):
         driver.get(self.base_url + "login")
         cred_user_elem = driver.find_element_by_id("id_username")
         cred_user_elem.clear()
-        cred_user_elem.send_keys(os.environ['DOJO_ADMIN_USER'])
+        cred_user_elem.send_keys(os.environ['DD_ADMIN_USER'])
         cred_pass_elem = driver.find_element_by_id("id_password")
         cred_pass_elem.clear()
-        cred_pass_elem.send_keys(os.environ['DOJO_ADMIN_PASSWORD'])
+        cred_pass_elem.send_keys(os.environ['DD_ADMIN_PASSWORD'])
         driver.find_element_by_css_selector("button.btn.btn-success").click()
         return driver
 
@@ -107,5 +107,14 @@ class Login(unittest.TestCase):
         self.assertEqual([], self.verificationErrors)
 
 
+def suite():
+    suite = unittest.TestSuite()
+    suite.addTest(Login('setUp'))
+    suite.addTest(Login('login_page'))
+    return suite
+
+
 if __name__ == "__main__":
-    unittest.main()
+    runner = unittest.TextTestRunner(descriptions=True, failfast=True)
+    ret = not runner.run(suite()).wasSuccessful()
+    sys.exit(ret)

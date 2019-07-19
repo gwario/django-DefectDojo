@@ -11,6 +11,7 @@ textarea,
 .pagination-sm > li:last-child > span,
 .panel,
 .panel-heading,
+.panel-comments,
 .nav-pills > li > a,
 .breadcrumb,
 .panel > table:last-child,
@@ -1017,23 +1018,20 @@ div.custom-search-form {
         left: 100%;
         top: 0;
         min-width: 200px;
-        display: none;
-        border-radius: 4px;
-    }
-
-    #side-menu li:hover > ul,
-    #side-menu li:hover > ul.collapse {
-        display: block !important;
         height: auto !important;
+	display: none;
         z-index: 10000;
         background-color: #fff;
         background-clip: padding-box;
-        visibility: visible;
         border: 1px solid rgba(0, 0, 0, .15);
         border-left-width: 0;
         border-radius: 4px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-        border-radius: 4px;
+    }
+
+    #side-menu > li.mm-active ul,
+    #side-menu > li:hover ul {
+        display: block !important;
     }
 
     body.min #page-wrapper {
@@ -1123,6 +1121,15 @@ div.custom-search-form {
 	padding-bottom: 0;
 }
 
+.panel-default > .panel-comments {
+    color: black;
+    font-size: 12px;
+    padding: 10px 10px;
+    background-color: #ECECEC;
+    border-color: #A1C0D7;
+    border: 1px solid #dddedf;
+}
+
 .panel-default > .panel-heading {
     color: white;
     font-size: 16px;
@@ -1149,8 +1156,8 @@ div.custom-search-form {
 }
 
 .panel-default-secondary > .panel-heading {
-    color: white;
-    background-color: #546474;
+  color: white;
+  background-color: #546474;
 	border-style: solid;
 	border-color: #536473;
 }
