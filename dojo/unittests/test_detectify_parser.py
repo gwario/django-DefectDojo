@@ -54,13 +54,19 @@ class TestDetectifyJsonParser(TestCase):
         self.assertEqual('Content-Security-Policy / Missing Header on www.example.com ({})'.format(finding_hash),
                          finding.title)
         self.assertEqual('Info', finding.severity)
+        self.assertTrue(finding.description != '' and finding.description != 'None')
         self.assertEqual('CVSS score: 0', finding.impact)
         expected_references = "* [Content Security Policy Reference (MISC)](https://content-security-policy.com/)\n" \
-                              "* [Content Security Policy (OWASP)](https://www.owasp.org/index.php/Content_Security_Policy)\n" \
-                              "* [Content Security Policy Cheat Sheet (OWASP)](https://www.owasp.org/index.php/Content_Security_Policy_Cheat_Sheet)\n" \
-                              "* [Content Security Policy (GOOGLE)](https://developers.google.com/web/fundamentals/security/csp/)\n" \
-                              "* [Content Security Policy (MOZILLA)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)\n" \
-                              "* [Content Security Policy (WIKIPEDIA)](https://en.wikipedia.org/wiki/Content_Security_Policy)\n"
+                              "* [Content Security Policy (OWASP)](https://www.owasp.org/index.php/Content_Security_P" \
+                              "olicy)\n" \
+                              "* [Content Security Policy Cheat Sheet (OWASP)](https://www.owasp.org/index.php/Conte" \
+                              "nt_Security_Policy_Cheat_Sheet)\n" \
+                              "* [Content Security Policy (GOOGLE)](https://developers.google.com/web/fundamentals/s" \
+                              "ecurity/csp/)\n" \
+                              "* [Content Security Policy (MOZILLA)](https://developer.mozilla.org/en-US/docs/Web/HT" \
+                              "TP/CSP)\n" \
+                              "* [Content Security Policy (WIKIPEDIA)](https://en.wikipedia.org/wiki/Content_Security" \
+                              "_Policy)\n"
         self.assertEqual(expected_references, finding.references)
 
     def test_parse_multiple_vulnerability_finding(self):
@@ -81,13 +87,19 @@ class TestDetectifyJsonParser(TestCase):
         self.assertEqual('Content-Security-Policy / Missing Header on www.example.com ({})'.format(finding1_hash),
                          finding1.title)
         self.assertEqual('Info', finding1.severity)
+        self.assertTrue(finding2.description != '' and finding2.description != 'None')
         self.assertEqual('CVSS score: 0', finding1.impact)
         expected_references = "* [Content Security Policy Reference (MISC)](https://content-security-policy.com/)\n" \
-                              "* [Content Security Policy (OWASP)](https://www.owasp.org/index.php/Content_Security_Policy)\n" \
-                              "* [Content Security Policy Cheat Sheet (OWASP)](https://www.owasp.org/index.php/Content_Security_Policy_Cheat_Sheet)\n" \
-                              "* [Content Security Policy (GOOGLE)](https://developers.google.com/web/fundamentals/security/csp/)\n" \
-                              "* [Content Security Policy (MOZILLA)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)\n" \
-                              "* [Content Security Policy (WIKIPEDIA)](https://en.wikipedia.org/wiki/Content_Security_Policy)\n"
+                              "* [Content Security Policy (OWASP)](https://www.owasp.org/index.php/Content_Security_P" \
+                              "olicy)\n" \
+                              "* [Content Security Policy Cheat Sheet (OWASP)](https://www.owasp.org/index.php/Conten" \
+                              "t_Security_Policy_Cheat_Sheet)\n" \
+                              "* [Content Security Policy (GOOGLE)](https://developers.google.com/web/fundamentals/se" \
+                              "curity/csp/)\n" \
+                              "* [Content Security Policy (MOZILLA)](https://developer.mozilla.org/en-US/docs/Web/HTT" \
+                              "P/CSP)\n" \
+                              "* [Content Security Policy (WIKIPEDIA)](https://en.wikipedia.org/wiki/Content_Securit" \
+                              "y_Policy)\n"
         self.assertEqual(expected_references, finding1.references)
 
         m = hashlib.sha256()
@@ -101,9 +113,14 @@ class TestDetectifyJsonParser(TestCase):
         self.assertEqual("External Links using target='_blank' on www.example.com/path/some-path ({})".format(
             finding2_hash), finding2.title)
         self.assertEqual('Medium', finding2.severity)
+        self.assertTrue(finding2.description != '' and finding2.description != 'None')
         self.assertEqual('CVSS score: 4.9', finding2.impact)
-        expected_references = "* [Target=\"_blank\"?-?the most underestimated vulnerability ever (MISC)](https://medium.com/@jitbit/target-blank-the-most-underestimated-vulnerability-ever-96e328301f4c#.oh7ggu8gn)\n" \
-                              "* [Hacker News Discussion (YCOMBINATOR)](https://news.ycombinator.com/item?id=11631292)\n" \
-                              "* [Target Blank Vulnerability (GITHUB)](https://github.com/chafikhnini/target-blank-vulnerability)\n" \
+        expected_references = "* [Target=\"_blank\"?-?the most underestimated vulnerability ever (MISC)](https://med" \
+                              "ium.com/@jitbit/target-blank-the-most-underestimated-vulnerability-ever-96e328301f4c" \
+                              "#.oh7ggu8gn)\n" \
+                              "* [Hacker News Discussion (YCOMBINATOR)](https://news.ycombinator.com/item?id=116312" \
+                              "92)\n" \
+                              "* [Target Blank Vulnerability (GITHUB)](https://github.com/chafikhnini/target-blank-v" \
+                              "ulnerability)\n" \
                               "* [When to use target=\"_blank\" (MISC)](https://css-tricks.com/use-target_blank/)\n"
         self.assertEqual(expected_references, finding2.references)
