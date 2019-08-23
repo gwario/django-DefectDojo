@@ -1,8 +1,8 @@
 from __future__ import with_statement
 
+import cgi
 import hashlib
 import json
-import re
 from urlparse import urlparse
 
 from dojo.models import Finding, Endpoint
@@ -25,8 +25,8 @@ class DetectifyJsonParser(object):
     def parse_json(self, json_output):
         try:
             tree = json.load(json_output)
-        except:
-            raise Exception("Invalid format")
+        except ValueError as e:
+            raise Exception("Invalid format ({})".format(e))
 
         return tree
 
@@ -81,22 +81,19 @@ def get_item(finding, test):
 
     o = urlparse(url)
 
-    rhost = re.search(
-        "(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|localhost|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))[\:]*([0-9]+)*([/]*($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+)).*?$",
-        url)
-
     protocol = o.scheme
     host = o.netloc
     path = o.path
     query = o.query
     fragment = o.fragment
 
-    port = 80
-    if protocol == 'https':
-        port = 443
-
-    if rhost.group(11) is not None:
-        port = rhost.group(11)
+    if o.port:
+        port = o.port
+    else:
+        if protocol == 'https':
+            port = 443
+        else:
+            port = 80
 
     endpoints = get_or_create_endpoints(fragment, host, path, port, protocol, query)
 
@@ -133,16 +130,18 @@ def get_item(finding, test):
 def get_or_create_endpoints(fragment, host, path, port, protocol, query):
     try:
         dupe_endpoint = Endpoint.objects.get(protocol=protocol,
-                                             host=host + (":" + port) if port is not None else "",
+                                             host=host,
                                              query=query,
+                                             prot=port,
                                              fragment=fragment,
                                              path=path)
     except:
         dupe_endpoint = None
     if not dupe_endpoint:
         endpoint = Endpoint(protocol=protocol,
-                            host=host + (":" + str(port)) if port is not None else "",
+                            host=host,
                             query=query,
+                            port=port,
                             fragment=fragment,
                             path=path)
     else:
@@ -194,24 +193,23 @@ def get_title(item_node, host, path):
     m.update(item_node['target'])
     finding_hash = m.hexdigest()
 
-    host_path = "{}/{}".format(host.strip('/'), path.strip('/')) if path.strip('/') != '' else host.strip('/')
-    return "{} on {} ({})".format(item_node['name'], host_path, finding_hash)
+    return "{} on {}{} ({})".format(item_node['name'], host, path, finding_hash)
 
 
 def get_description(item_node):
-    if 'details' in item_node and len(item_node['details']) == 0:
+
+    if 'details' in item_node and len(item_node['details']) > 0:
         description = 'Below you can find more detailed information about the finding. Depending on the finding ' \
                       'type, you might see a code snippet, or other information.'
         for detail in item_node['details']:
             if detail['type'] == 'Text':
-                description += "\n" + detail['value']
-            elif detail['type'] == 'HTML':
-                # html2text.html2text(background)
-                description += "\n```" + detail['value'] + "```"
+                description += "\n\n" + detail['value'].replace('\\r', '').replace('\\n', '  \n')
+            # elif detail['type'] == 'HTML': # Does not work properly
+            #     description += "\n\n<pre><code>\n" + detail['value'].replace('\\r', '').replace('\\n', '  \n') + "\n</code></pre>"
             else:
-                description += "\n" + detail['value']
+                description += "\n\n" + detail['value'].replace('\\r', '').replace('\\n', '  \n')
     else:
-        description = None
+        description = ""
     return description
 
 
@@ -283,7 +281,7 @@ def format_description(finding):
     details_preamble = "Below you can find more detailed information about the finding. Depending on the finding " \
                        "type, you might see a code snippet, or other information."
     request_response_preamble = "Below you can see the request header sent by Detectify and the response header " \
-                                  "that Detectify received from your domain."
+                                "that Detectify received from your domain."
 
     description = "{}\n{}".format(details_preamble, finding['details'])
     if headers_exist(finding):
