@@ -1,0 +1,10 @@
+{
+  "export": {
+    "version": "1.2",
+    "target": "www.example.com",
+    "url": "https://detectify.com/report/0123456789abcdef0123456789abcdef/0123456789abcdef0123456789abcdef01234567",
+    "started": "2019-07-12T09:57:09.363Z",
+    "finished": "2019-07-12T09:57:09.366Z"
+  },
+  "findings": []
+}

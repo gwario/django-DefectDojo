@@ -1,4 +1,5 @@
 from dojo.tools.burp.parser import BurpXmlParser
+from dojo.tools.detectify.parser import DetectifyJsonParser
 from dojo.tools.nessus.parser import NessusCSVParser, NessusXMLParser
 from dojo.tools.nmap.parser import NmapXMLParser
 from dojo.tools.nexpose.parser import NexposeFullXmlParser
@@ -168,6 +169,8 @@ def import_parser_factory(file, test, active, verified, scan_type=None):
         parser = WapitiXMLParser(file, test)
     elif scan_type == 'Cobalt.io Scan':
         parser = CobaltCSVParser(file, test)
+    elif scan_type == 'Detectify Scan (JSON Report)':
+        parser = DetectifyJsonParser(file, test)
     else:
         raise ValueError('Unknown Test Type')
 
