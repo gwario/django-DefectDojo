@@ -1102,6 +1102,15 @@
     }
 },
 {
+    "model": "dojo.test_type",
+    "pk": 33,
+    "fields": {
+        "name": "Detectify Scan",
+        "static_tool": false,
+        "dynamic_tool": true
+    }
+},
+{
     "model": "dojo.product",
     "pk": 1,
     "fields": {

@@ -1,0 +1,325 @@
+{
+  "export": {
+    "version": "1.2",
+    "target": "www.example.com",
+    "url": "https://detectify.com/report/0123456789abcdef0123456789abcdef/0123456789abcdef0123456789abcdef01234567",
+    "started": "2019-07-12T09:57:09.363Z",
+    "finished": "2019-07-12T09:57:09.366Z"
+  },
+  "findings": [
+    {
+      "id": "29aa222a-bb77-444c-d999-5efffbbbbbff",
+      "href": "/report/0123456789abcdef0123456789abcdef/0123456789abcdef0123456789abcdef01234567/01ab23cd-45ef-67ab-89cd-01ef23ab45cd",
+      "name": "Content-Security-Policy / Missing Header",
+      "finding_id": 377,
+      "category": "Invalid Header Value",
+      "score": "0",
+      "severity": "information",
+      "target": "https://www.example.com/",
+      "headers": {
+        "general": {
+          "request_url": "https://www.example.com/",
+          "request_method": "GET",
+          "status_code": "302 Found"
+        },
+        "request": [
+          {
+            "name": "Accept",
+            "value": "text/html,application/xhtml+xml,application/xml; q=0.9,image/webp,*/*; q=0.8"
+          },
+          {
+            "name": "Upgrade-Insecure-Requests",
+            "value": "1"
+          },
+          {
+            "name": "User-Agent",
+            "value": "Mozilla/5.0 (compatible; Detectify) +https://detectify.com/bot/0123456789abcdef0123456789abcdef01234567"
+          },
+          {
+            "name": "Accept-Encoding",
+            "value": "gzip, deflate"
+          },
+          {
+            "name": "Accept-Language",
+            "value": "en-US"
+          },
+          {
+            "name": "Host",
+            "value": "www.example.com"
+          },
+          {
+            "name": "Cookie",
+            "value": "example=adasdw3rtrfdg; referrer=asdasd234234"
+          },
+          {
+            "name": "Cache-Control",
+            "value": "no-store, no-cache"
+          },
+          {
+            "name": "Pragma",
+            "value": "no-cache"
+          }
+        ],
+        "response": [
+          {
+            "name": "Connection",
+            "value": "keep-alive"
+          },
+          {
+            "name": "X-DNS-Prefetch-Control",
+            "value": "off"
+          },
+          {
+            "name": "X-Frame-Options",
+            "value": "SAMEORIGIN"
+          },
+          {
+            "name": "Strict-Transport-Security",
+            "value": "max-age=15552000; includeSubDomains"
+          },
+          {
+            "name": "X-Download-Options",
+            "value": "noopen"
+          },
+          {
+            "name": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "name": "X-XSS-Protection",
+            "value": "1; mode=block"
+          },
+          {
+            "name": "Vary",
+            "value": "Accept,Accept-Encoding"
+          },
+          {
+            "name": "Content-Length",
+            "value": "50"
+          },
+          {
+            "name": "Cache-Control",
+            "value": "private, no-cache, max-age=0"
+          },
+          {
+            "name": "Content-Type",
+            "value": "text/html; charset=utf-8"
+          },
+          {
+            "name": "Date",
+            "value": "Tue, 19 Mar 2019 16:12:01 GMT"
+          },
+          {
+            "name": "Location",
+            "value": "/us"
+          },
+          {
+            "name": "Set-Cookie",
+            "value": "xy=us; Max-Age=3600; Domain=.example.com; Path=/; Expires=Tue, 19 Mar 2019 17:12:01 GMT; Secure"
+          },
+          {
+            "name": "Server",
+            "value": "Apache"
+          },
+          {
+            "name": "X-Permitted-Cross-Domain-Policies",
+            "value": "none"
+          },
+          {
+            "name": "X-Cache",
+            "value": "Miss from cloudfront"
+          },
+          {
+            "name": "Via",
+            "value": "1.1 0123456789abcdef0123456789abcdef.cloudfront.net (CloudFront)"
+          }
+        ]
+      },
+      "resources": [
+        {
+          "resource": "Content Security Policy Reference",
+          "source": "MISC",
+          "link": "https://content-security-policy.com/"
+        },
+        {
+          "resource": "Content Security Policy",
+          "source": "OWASP",
+          "link": "https://www.owasp.org/index.php/Content_Security_Policy"
+        },
+        {
+          "resource": "Content Security Policy Cheat Sheet",
+          "source": "OWASP",
+          "link": "https://www.owasp.org/index.php/Content_Security_Policy_Cheat_Sheet"
+        },
+        {
+          "resource": "Content Security Policy",
+          "source": "GOOGLE",
+          "link": "https://developers.google.com/web/fundamentals/security/csp/"
+        },
+        {
+          "resource": "Content Security Policy",
+          "source": "MOZILLA",
+          "link": "https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP"
+        },
+        {
+          "resource": "Content Security Policy",
+          "source": "WIKIPEDIA",
+          "link": "https://en.wikipedia.org/wiki/Content_Security_Policy"
+        }
+      ],
+      "details": [
+        {
+          "uuid": "01ab23cd-45ef-67ab-89cd-01ef23ab45cd",
+          "type": "Text",
+          "version": "1.1",
+          "value": "There is no direct impact of not implementing CSP on your website. However, if your website is vulnerable to a cross-site Scripting (XSS) attack, then the CSP can mitigate the flaw. By not implementing CSP you will be missing out on this layer of security."
+        }
+      ]
+    },
+    {
+      "id": "dd8888bb-aa33-44cc-bb11-88844bbbb111",
+      "href": "/report/0123456789abcdef0123456789abcdef/0123456789abcdef0123456789abcdef01234567/dd8888bb-aa33-44cc-bb11-88844bbbb111",
+      "name": "External Links using target='_blank'",
+      "finding_id": 254,
+      "category": "External Links using target='_blank'",
+      "score": "4.9",
+      "severity": "medium",
+      "target": "https://www.example.com/path/some-path",
+      "headers": {
+        "general": {
+          "request_url": "https://www.example.com/path/some-path",
+          "request_method": "GET",
+          "status_code": "200 OK"
+        },
+        "request": [
+          {
+            "name": "Accept",
+            "value": "text/html,application/xhtml+xml,application/xml; q=0.9,image/webp,*/*; q=0.8"
+          },
+          {
+            "name": "Upgrade-Insecure-Requests",
+            "value": "1"
+          },
+          {
+            "name": "User-Agent",
+            "value": "Mozilla/5.0 (compatible; Detectify) +https://detectify.com/bot/0123456789abcdef0123456789abcdef01234567"
+          },
+          {
+            "name": "Accept-Encoding",
+            "value": "gzip, deflate"
+          },
+          {
+            "name": "Accept-Language",
+            "value": "en-US"
+          }
+        ],
+        "response": [
+          {
+            "name": "X-Cache",
+            "value": "Miss from cloudfront"
+          },
+          {
+            "name": "Server",
+            "value": "Apache"
+          },
+          {
+            "name": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "name": "Connection",
+            "value": "keep-alive"
+          },
+          {
+            "name": "X-Download-Options",
+            "value": "noopen"
+          },
+          {
+            "name": "Pragma",
+            "value": "no-cache"
+          },
+          {
+            "name": "X-Permitted-Cross-Domain-Policies",
+            "value": "none"
+          },
+          {
+            "name": "Date",
+            "value": "Tue, 19 Mar 2019 14:31:54 GMT"
+          },
+          {
+            "name": "Via",
+            "value": "1.1 0123456789abcdef0123456789abcdef.cloudfront.net (CloudFront)"
+          },
+          {
+            "name": "X-Frame-Options",
+            "value": "DENY"
+          },
+          {
+            "name": "Cache-Control",
+            "value": "no-store, no-cache, must-revalidate"
+          },
+          {
+            "name": "Content-Encoding",
+            "value": "gzip"
+          },
+          {
+            "name": "Vary",
+            "value": "Accept-Encoding"
+          },
+          {
+            "name": "Expires",
+            "value": "Thu, 19 Nov 1981 08:52:00 GMT"
+          },
+          {
+            "name": "Content-Length",
+            "value": "23169"
+          },
+          {
+            "name": "X-XSS-Protection",
+            "value": "1; mode=block"
+          },
+          {
+            "name": "Content-Type",
+            "value": "text/html; charset=UTF-8"
+          }
+        ]
+      },
+      "resources": [
+        {
+          "resource": "Target=\"_blank\"?-?the most underestimated vulnerability ever",
+          "source": "MISC",
+          "link": "https://medium.com/@jitbit/target-blank-the-most-underestimated-vulnerability-ever-96e328301f4c#.oh7ggu8gn"
+        },
+        {
+          "resource": "Hacker News Discussion",
+          "source": "YCOMBINATOR",
+          "link": "https://news.ycombinator.com/item?id=11631292"
+        },
+        {
+          "resource": "Target Blank Vulnerability",
+          "source": "GITHUB",
+          "link": "https://github.com/chafikhnini/target-blank-vulnerability"
+        },
+        {
+          "resource": "When to use target=\"_blank\"",
+          "source": "MISC",
+          "link": "https://css-tricks.com/use-target_blank/"
+        }
+      ],
+      "details": [
+        {
+          "type": "HTML",
+          "version": "1.1",
+          "uuid": "f4d01d68-e8f1-42c3-9580-75d3207d4a26",
+          "value": "<a href=\"https://www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.example.com%2Fpath%2Fsome-path\" target=\"_blank\">text</a>\r\n"
+        },
+        {
+          "uuid": "c5fd1c5f-9839-4be2-b6fd-ed5261234cc6",
+          "type": "Text",
+          "version": "1.1",
+          "value": "In order to mitigate the issue, add the following attribue to your link(s): rel=\"noopener noreferrer\""
+        }
+      ]
+    }
+  ]
+}
