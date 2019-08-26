@@ -1,13 +1,8 @@
 from __future__ import with_statement
 
-import cgi
 import hashlib
 import json
-from urlparse import urlparse
-
-import html2text
-from lxml.html import fragments_fromstring
-from lxml.etree import tostring
+from urllib.parse import urlparse
 
 from dojo.models import Finding, Endpoint
 
