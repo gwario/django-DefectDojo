@@ -5,6 +5,10 @@ import hashlib
 import json
 from urlparse import urlparse
 
+import html2text
+from lxml.html import fragments_fromstring
+from lxml.etree import tostring
+
 from dojo.models import Finding, Endpoint
 
 __author__ = "Mario Gastegger"
@@ -76,7 +80,6 @@ def do_clean(value):
 
 
 def get_item(finding, test):
-
     url = get_url(finding)
 
     o = urlparse(url)
@@ -197,16 +200,18 @@ def get_title(item_node, host, path):
 
 
 def get_description(item_node):
-
     if 'details' in item_node and len(item_node['details']) > 0:
         description = 'Below you can find more detailed information about the finding. Depending on the finding ' \
                       'type, you might see a code snippet, or other information.'
         for detail in item_node['details']:
             if detail['type'] == 'Text':
                 description += "\n\n" + detail['value'].replace('\\r', '').replace('\\n', '  \n')
-            # elif detail['type'] == 'HTML': # Does not work properly
-            #     description += "\n\n<pre><code>\n" + detail['value'].replace('\\r', '').replace('\\n', '  \n') +
-            #     "\n</code></pre>"
+            elif detail['type'] == 'HTML':
+                text = detail['value'].replace('\\r', '').replace('\\n', '  \n')
+                string = ""
+                for line in text.splitlines():
+                    string += "    " + line
+                description += "\n\n```  \n" + string + "\n```"
             else:
                 description += "\n\n" + detail['value'].replace('\\r', '').replace('\\n', '  \n')
     else:
