@@ -205,7 +205,8 @@ def get_description(item_node):
             if detail['type'] == 'Text':
                 description += "\n\n" + detail['value'].replace('\\r', '').replace('\\n', '  \n')
             # elif detail['type'] == 'HTML': # Does not work properly
-            #     description += "\n\n<pre><code>\n" + detail['value'].replace('\\r', '').replace('\\n', '  \n') + "\n</code></pre>"
+            #     description += "\n\n<pre><code>\n" + detail['value'].replace('\\r', '').replace('\\n', '  \n') +
+            #     "\n</code></pre>"
             else:
                 description += "\n\n" + detail['value'].replace('\\r', '').replace('\\n', '  \n')
     else:
