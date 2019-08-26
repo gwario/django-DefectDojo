@@ -51,7 +51,7 @@ class TestDetectifyJsonParser(TestCase):
         m.update("https://www.example.com/")
         finding_hash = m.hexdigest()
 
-        self.assertEqual('Content-Security-Policy / Missing Header on www.example.com ({})'.format(finding_hash),
+        self.assertEqual('Content-Security-Policy / Missing Header on www.example.com/ ({})'.format(finding_hash),
                          finding.title)
         self.assertEqual('Info', finding.severity)
         self.assertTrue(finding.description != '' and finding.description != 'None')
@@ -73,8 +73,12 @@ class TestDetectifyJsonParser(TestCase):
 
         testfile = open("dojo/unittests/scans/detectify/multiple_findings_report_export.json")
         parser = DetectifyJsonParser(testfile, Test())
-        finding1 = parser.items[1]
-        finding2 = parser.items[0]
+        if 'Content-Security-Policy / Missing Header' in parser.items[0].title:
+            finding1 = parser.items[0]
+            finding2 = parser.items[1]
+        else:
+            finding1 = parser.items[1]
+            finding2 = parser.items[2]
 
         m = hashlib.sha256()
         m.update("www.example.com")
@@ -84,7 +88,7 @@ class TestDetectifyJsonParser(TestCase):
         m.update("https://www.example.com/")
         finding1_hash = m.hexdigest()
 
-        self.assertEqual('Content-Security-Policy / Missing Header on www.example.com ({})'.format(finding1_hash),
+        self.assertEqual('Content-Security-Policy / Missing Header on www.example.com/ ({})'.format(finding1_hash),
                          finding1.title)
         self.assertEqual('Info', finding1.severity)
         self.assertTrue(finding2.description != '' and finding2.description != 'None')
